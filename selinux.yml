@@ -1,0 +1,10 @@
+---
+- hosts: all 
+  become: yes 
+  roles:
+  - selinux
+  vars:
+    selinux_booleans:
+      # Set the 'samba_enable_home_dirs' boolean to 'on' in the current
+      # session only
+      - { name: 'httpd_can_network_connect', state: 'on', persistent: 'yes' }

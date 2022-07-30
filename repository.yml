@@ -1,0 +1,12 @@
+---
+- hosts: database 
+  become: yes
+  tasks: 
+  - name: Create Repo
+    yum_repository:
+       name: mysql80-community.
+       description: “MySQL 8.0 YUM Repo”
+       baseurl: http://repo.mysql.com/RPM-GPG-KEY-mysql
+       gpgcheck: yes
+       gpgkey: http://repo.mysql.com/RPM-GPG-KEY-mysql
+       enabled: yes

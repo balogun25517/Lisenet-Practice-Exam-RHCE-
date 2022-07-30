@@ -1,0 +1,12 @@
+- hosts: database
+  become: yes
+  tasks:
+  - name: Verify Folder is there
+    file:
+      path: /etc/ansible/facts.d
+      state: directory
+  - name: Insert the variable 
+    lineinfile:
+      path: /etc/ansible/facts.d/custom.fact
+      line: "[sample_facts]\n server_role = mysql"
+      create: yes

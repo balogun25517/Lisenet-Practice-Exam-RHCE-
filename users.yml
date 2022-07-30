@@ -1,0 +1,34 @@
+---
+- hosts: all 
+  become: yes 
+  vars_files:
+  - /home/automation/plays/vars/user_list.yml
+  - /home/automation/plays/secret.yml
+  tasks: 
+  - name: Ensure Wheels Group is Present 
+    group: 
+      name: wheel
+      state: present 
+  - name: Create Users on Webserver
+    user: 
+      name: "{{ item.username }}"
+      password: "user_password|password_hash('sha512')"
+      groups: wheel
+      ssh_key_file: /home/automation/.ssh/id_rsa.pub
+      shell: /bin/bash
+      update_password: on_create
+    loop: "{{ users }}"
+    when:
+    - inventory_hostname in groups['webservers']
+    - item.uid|string|first == '1'
+  - name: Create Users on Database 
+    user: 
+      name: "{{ item.username }}"
+      password: "user_password|password_hash('sha512')"
+      group: wheel
+      shell: /bin/bash
+      update_password: on_create
+    loop: "{{ users  }}"
+    when: 
+    - inventory_hostname in groups['database'] 
+    - item.uid|string|first =='2'

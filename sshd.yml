@@ -1,0 +1,19 @@
+---
+- hosts: all 
+  become: yes 
+  tasks: 
+  - name: configure sshd banner
+    lineinfile:
+       path: /etc/ssh/sshd_config
+       regex: '^#Banner none'
+       line: Banner /etc/motd
+  - name: configure sshd x11 forwarding 
+    lineinfile:
+       path: /etc/ssh/sshd_config
+       regex: '^#X11Forwarding no'
+       line: X11Forwarding no
+  - name: configure sshd MaxAuth
+    lineinfile: 
+       path: /etc/ssh/sshd_config
+       regex: '^#MaxAuthTries 6'
+       line: MaxAuthTries 3 

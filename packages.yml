@@ -1,0 +1,20 @@
+---
+- hosts: all 
+  become: yes
+  tasks:
+  - name: install packages for webserver
+    yum: 
+      name: "{{ item }}"
+      state: present
+    when: inventory_hostname in groups['proxy']
+    loop:
+    - tcpdump
+    - mailx
+  - name: Install packages for the database
+    yum:
+      name: "{{ item }}"
+      state: present
+    when: inventory_hostname in groups['database']
+    loop:
+    - lsof
+    - mailx

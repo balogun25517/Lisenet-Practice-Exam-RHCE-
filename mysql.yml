@@ -1,0 +1,6 @@
+---
+- hosts: database
+  become: yes 
+  roles:
+  - sample-mysql
+  

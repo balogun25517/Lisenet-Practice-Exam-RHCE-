@@ -1,0 +1,26 @@
+---
+- hosts: all 
+  become: yes 
+  tasks: 
+  - name: Remove Motd
+    file:
+       path: /etc/motd
+       state: absent 
+  - name: Add MOTD
+    lineinfile:
+       path: /etc/motd
+       line: "Welcome to HAProxy server"
+       create: yes
+    when: inventory_hostname in groups['proxy']
+  - name: Add MOTD
+    lineinfile:
+       path: /etc/motd
+       line: "Welcome to Apache server"
+       create: yes
+    when: inventory_hostname in groups['webservers']
+  - name: Add MOTD
+    lineinfile:
+       path: /etc/motd
+       line: "Welcome to MySQL server"
+       create: yes
+    when: inventory_hostname in groups['database']

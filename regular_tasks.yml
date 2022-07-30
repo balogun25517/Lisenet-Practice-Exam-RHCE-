@@ -1,0 +1,17 @@
+---
+- hosts: proxy
+  become: yes 
+  tasks: 
+  - name: install cronie 
+    yum: 
+      name: cronie
+      state: present
+  - name: Crontab 
+    cron:
+      name: "check the name of users"
+      minute: "0"
+      hour: "*"
+      job: "date > /var/log/time.log"
+      user: root
+  
+  

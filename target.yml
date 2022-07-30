@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes 
+  tasks: 
+  - name: Set Default
+    file:
+       dest: /etc/systemd/system/default.target
+       src: /usr/lib/systemd/system/graphical.target
+       state: link
+

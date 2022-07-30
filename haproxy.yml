@@ -1,0 +1,44 @@
+---
+- hosts: proxy 
+  become: yes 
+  roles: 
+  - geerlingguy.haproxy
+  vars: 
+    haproxy_backend_balance_method: 'roundrobin'
+    haproxy_backend_mode: 'http'
+    haproxy_backend_servers:
+      - name: worker2
+        address: 10.211.55.9:80
+      - name: worker3
+        address: 10.211.55.8:80
+  tasks:
+  - name: Install Firewalld
+    yum: 
+       name: firewalld
+       state: present 
+  - name: firewalld started
+    service: 
+        name: firewalld
+        state: started 
+  - name: Allow Firewalld port 80
+    firewalld:
+        port: 80/tcp
+        state: enabled
+        permanent: yes 
+
+- hosts: all
+  become: yes 
+  tasks: 
+  - name: reboot
+    reboot: 
+  - name: curl 
+    get_url:
+      url:  http://worker1/
+      dest: /home/automation/checkss
+    register: notepad
+    when: inventory_hostname in groups['proxy']
+  - name: print
+    debug:
+      msg: "{{ notepad }}"
+     
+  

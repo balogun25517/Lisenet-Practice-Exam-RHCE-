@@ -1,0 +1,9 @@
+[proxy]
+worker1
+
+[webservers]
+worker2
+worker3
+
+[database]
+worker4
